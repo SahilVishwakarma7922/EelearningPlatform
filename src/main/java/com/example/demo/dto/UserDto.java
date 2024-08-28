@@ -1,6 +1,9 @@
 package com.example.demo.dto;
 
 import java.util.Date;
+import java.util.List;
+
+import com.example.demo.model.Role;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,5 +28,6 @@ public class UserDto {
 	private Date createdAt;
 	private String profilePath;
 	private String recentOtp;
+	private List<Role> roles;
 	
 }

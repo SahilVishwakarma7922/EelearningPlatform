@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.CustomPageResponse;
@@ -27,9 +28,18 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserMapper mapper;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Override
 	public UserDto saveUser(UserDto dto) {
+		
+		if (userRepo.existsByEmail(dto.getEmail())) {
+			throw new ResourceNotFoundException("This email id is already exists please choose other one ");
+		}
+		
 		User entity = mapper.toEntity(dto);
+		entity.setPassword(passwordEncoder.encode(dto.getPassword()));
 		java.util.Date date = new java.util.Date();
 		entity.setCreatedAt(date);
 		User save = userRepo.save(entity);
